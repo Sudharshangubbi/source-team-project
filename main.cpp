@@ -1,5 +1,3 @@
-// changes by shreyas 
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -95,7 +93,26 @@ void displayTop3ItemsByQuantity() {
     }
 }
 
-// Password authentication
+// Chinmai's contribution: Search item by name
+void searchItemByName() {
+    string name;
+    cout << "Enter item name to search: ";
+    cin.ignore();
+    getline(cin, name);
+
+    bool found = false;
+    for (const auto& item : inventory) {
+        if (item.itemName == name) {
+            item.display();
+            found = true;
+        }
+    }
+    if (!found) {
+        cout << "No item found with the name \"" << name << "\".\n";
+    }
+}
+
+// Sudharshan's contribution: Password authentication
 bool authenticate() {
     string password;
     cout << "Enter password to access Inventory Management System: ";
@@ -110,6 +127,7 @@ bool authenticate() {
     }
 }
 
+// Menu
 void mainMenu() {
     int choice;
     while (true) {
@@ -119,10 +137,10 @@ void mainMenu() {
         cout << "3. Search Item by Item Code\n";
         cout << "4. Delete Item\n";
         cout << "5. Display Top 3 Items by Quantity (Shreyas)\n";
-        cout << "6. Exit\n";
+        cout << "6. Search Item by Name (Chinmai)\n";
+        cout << "7. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
-        cin.ignore();
 
         switch (choice) {
             case 1: addItem(); break;
@@ -130,7 +148,8 @@ void mainMenu() {
             case 3: searchItem(); break;
             case 4: deleteItem(); break;
             case 5: displayTop3ItemsByQuantity(); break;
-            case 6: cout << "Exiting...\n"; return;
+            case 6: searchItemByName(); break;
+            case 7: cout << "Exiting...\n"; return;
             default: cout << "Invalid choice! Try again.\n"; break;
         }
     }
