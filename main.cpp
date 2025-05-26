@@ -76,7 +76,7 @@ void deleteItem() {
     }
 }
 
-// Shreyas's contribution: Display top 3 items by quantity
+// Display top 3 items by quantity (Shreyas's contribution)
 void displayTop3ItemsByQuantity() {
     if (inventory.empty()) {
         cout << "No items available.\n";
@@ -93,7 +93,7 @@ void displayTop3ItemsByQuantity() {
     }
 }
 
-// Chinmai's contribution: Search item by name
+// Search item by name (Chinami's contribution)
 void searchItemByName() {
     string name;
     cout << "Enter item name to search: ";
@@ -112,7 +112,28 @@ void searchItemByName() {
     }
 }
 
-// Sudharshan's contribution: Password authentication
+// Update item quantity by item code (Suhas's contribution)
+void updateItemQuantity() {
+    int code;
+    cout << "Enter item code to update quantity: ";
+    cin >> code;
+    cin.ignore();
+
+    for (auto& item : inventory) {
+        if (item.itemCode == code) {
+            int newQuantity;
+            cout << "Enter new quantity: ";
+            cin >> newQuantity;
+            cin.ignore();
+            item.quantity = newQuantity;
+            cout << "Quantity updated successfully.\n";
+            return;
+        }
+    }
+    cout << "Item not found.\n";
+}
+
+// Password authentication (Sudharshan's contribution)
 bool authenticate() {
     string password;
     cout << "Enter password to access Inventory Management System: ";
@@ -127,7 +148,7 @@ bool authenticate() {
     }
 }
 
-// Menu
+// Main menu
 void mainMenu() {
     int choice;
     while (true) {
@@ -137,10 +158,12 @@ void mainMenu() {
         cout << "3. Search Item by Item Code\n";
         cout << "4. Delete Item\n";
         cout << "5. Display Top 3 Items by Quantity (Shreyas)\n";
-        cout << "6. Search Item by Name (Chinmai)\n";
-        cout << "7. Exit\n";
+        cout << "6. Search Item by Name (Chinami)\n";
+        cout << "7. Update Item Quantity (Suhas)\n";
+        cout << "8. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
+        cin.ignore();
 
         switch (choice) {
             case 1: addItem(); break;
@@ -149,7 +172,8 @@ void mainMenu() {
             case 4: deleteItem(); break;
             case 5: displayTop3ItemsByQuantity(); break;
             case 6: searchItemByName(); break;
-            case 7: cout << "Exiting...\n"; return;
+            case 7: updateItemQuantity(); break;
+            case 8: cout << "Exiting...\n"; return;
             default: cout << "Invalid choice! Try again.\n"; break;
         }
     }
