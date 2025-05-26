@@ -93,10 +93,11 @@ void displayTop3ItemsByQuantity() {
     }
 }
 
-// Chinami's contribution: Search item by name
+// Chinmai's contribution: Search item by name
 void searchItemByName() {
     string name;
     cout << "Enter item name to search: ";
+    cin.ignore();
     getline(cin, name);
 
     bool found = false;
@@ -126,6 +127,7 @@ bool authenticate() {
     }
 }
 
+// Menu
 void mainMenu() {
     int choice;
     while (true) {
@@ -135,11 +137,10 @@ void mainMenu() {
         cout << "3. Search Item by Item Code\n";
         cout << "4. Delete Item\n";
         cout << "5. Display Top 3 Items by Quantity (Shreyas)\n";
-        cout << "6. Search Item by Name (Chinami)\n";
+        cout << "6. Search Item by Name (Chinmai)\n";
         cout << "7. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
-        cin.ignore();
 
         switch (choice) {
             case 1: addItem(); break;
