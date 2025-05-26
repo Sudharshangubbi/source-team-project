@@ -76,7 +76,7 @@ void deleteItem() {
     }
 }
 
-// Shreyas's contribution: Display top 3 items by quantity
+// Display top 3 items by quantity
 void displayTop3ItemsByQuantity() {
     if (inventory.empty()) {
         cout << "No items available.\n";
@@ -93,10 +93,11 @@ void displayTop3ItemsByQuantity() {
     }
 }
 
-// Chinami's contribution: Search item by name
+// Search item by name
 void searchItemByName() {
     string name;
     cout << "Enter item name to search: ";
+    cin.ignore();
     getline(cin, name);
 
     bool found = false;
@@ -111,7 +112,7 @@ void searchItemByName() {
     }
 }
 
-// Suhas's contribution: Update item quantity by item code
+// Update item quantity by item code
 void updateItemQuantity() {
     int code;
     cout << "Enter item code to update quantity: ";
@@ -132,7 +133,7 @@ void updateItemQuantity() {
     cout << "Item not found.\n";
 }
 
-// Prajwal's contribution: Sort items by item code
+// Sort items by item code
 void sortItemsByCode() {
     if (inventory.empty()) {
         cout << "No items available to sort.\n";
@@ -145,7 +146,7 @@ void sortItemsByCode() {
     cout << "Items sorted by item code.\n";
 }
 
-// Sudharshan's contribution: Password authentication
+// Password authentication
 bool authenticate() {
     string password;
     cout << "Enter password to access Inventory Management System: ";
@@ -160,6 +161,7 @@ bool authenticate() {
     }
 }
 
+// Main menu
 void mainMenu() {
     int choice;
     while (true) {
