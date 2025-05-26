@@ -1,156 +1,186 @@
-// inventory management system 
-
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
-
 using namespace std;
 
 class Item {
 public:
-    int id;
-    string name;
+    int itemCode;
+    string itemName;
     int quantity;
-    double price;
 
-    Item(int i, string n, int q, double p) : id(i), name(n), quantity(q), price(p) {}
-
-    void display() {
-        cout << "Item ID: " << id << "\nName: " << name << "\nQuantity: " << quantity << "\nPrice: " << price << "\n";
+    void display() const {
+        cout << "Item Code: " << itemCode << ", Name: " << itemName << ", Quantity: " << quantity << endl;
     }
 };
 
-class InventoryManagement {
-private:
-    vector<Item> items;
-    int nextId = 1;
+vector<Item> inventory;
 
-public:
-    void addItem(string name, int quantity, double price) {
-        items.push_back(Item(nextId++, name, quantity, price));
-        cout << "Item added.\n";
-    }
+// Add new item
+void addItem() {
+    Item item;
+    cout << "Enter item code: ";
+    cin >> item.itemCode;
+    cin.ignore();
 
-    Item* findItem(int id) {
-        for (auto &i : items)
-            if (i.id == id) return &i;
-        return nullptr;
-    }
+    cout << "Enter item name: ";
+    getline(cin, item.itemName);
 
-    void updateItem(int id, string name, int quantity, double price) {
-        Item* item = findItem(id);
-        if (!item) {
-            cout << "Item not found.\n";
-            return;
-        }
-        item->name = name;
-        item->quantity = quantity;
-        item->price = price;
-        cout << "Item updated.\n";
-    }
+    cout << "Enter quantity: ";
+    cin >> item.quantity;
+    cin.ignore();
 
-    void deleteItem(int id) {
-        auto it = remove_if(items.begin(), items.end(), [id](Item &i) { return i.id == id; });
-        if (it != items.end()) {
-            items.erase(it, items.end());
-            cout << "Item deleted.\n";
-        } else {
-            cout << "Item not found.\n";
-        }
-    }
-
-    void displayAll() {
-        cout << "Inventory Items:\n";
-        for (auto &i : items) {
-            i.display();
-            cout << "----\n";
-        }
-    }
-
-    void displayLowStock(int threshold) {
-        cout << "Items with stock less than or equal to " << threshold << ":\n";
-        for (auto &i : items) {
-            if (i.quantity <= threshold) {
-                i.display();
-                cout << "----\n";
-            }
-        }
-    }
-};
-
-void showMenu() {
-    cout << "\n--- Inventory Management System ---\n";
-    cout << "1. Add Item\n2. Update Item\n3. Delete Item\n4. Display All Items\n5. Display Low Stock Items\n6. Exit\nEnter choice: ";
+    inventory.push_back(item);
+    cout << "Item added successfully.\n";
 }
 
-int main() {
-    InventoryManagement inv;
-    int choice;
+// Display all items
+void displayItems() {
+    cout << "\nAll Inventory Items:\n";
+    for (const auto& item : inventory) {
+        item.display();
+    }
+}
 
+// Search item by item code
+void searchItem() {
+    int code;
+    cout << "Enter item code to search: ";
+    cin >> code;
+    cin.ignore();
+
+    for (const auto& item : inventory) {
+        if (item.itemCode == code) {
+            item.display();
+            return;
+        }
+    }
+    cout << "Item not found.\n";
+}
+
+// Delete item by item code
+void deleteItem() {
+    int code;
+    cout << "Enter item code to delete: ";
+    cin >> code;
+    cin.ignore();
+
+    auto it = remove_if(inventory.begin(), inventory.end(),
+                        [code](const Item& item) { return item.itemCode == code; });
+    if (it != inventory.end()) {
+        inventory.erase(it, inventory.end());
+        cout << "Item deleted successfully.\n";
+    } else {
+        cout << "Item not found.\n";
+    }
+}
+
+// Shreyas's contribution: Display top 3 items by quantity
+void displayTop3ItemsByQuantity() {
+    if (inventory.empty()) {
+        cout << "No items available.\n";
+        return;
+    }
+
+    vector<Item> sortedItems = inventory;
+    sort(sortedItems.begin(), sortedItems.end(),
+         [](const Item& a, const Item& b) { return a.quantity > b.quantity; });
+
+    cout << "\nTop 3 Items by Quantity:\n";
+    for (size_t i = 0; i < min(sortedItems.size(), size_t(3)); ++i) {
+        sortedItems[i].display();
+    }
+}
+
+// Chinami's contribution: Search item by name
+void searchItemByName() {
+    string name;
+    cout << "Enter item name to search: ";
+    getline(cin, name);
+
+    bool found = false;
+    for (const auto& item : inventory) {
+        if (item.itemName == name) {
+            item.display();
+            found = true;
+        }
+    }
+    if (!found) {
+        cout << "No item found with the name \"" << name << "\".\n";
+    }
+}
+
+// Suhas's contribution: Update item quantity by item code
+void updateItemQuantity() {
+    int code;
+    cout << "Enter item code to update quantity: ";
+    cin >> code;
+    cin.ignore();
+
+    for (auto& item : inventory) {
+        if (item.itemCode == code) {
+            int newQuantity;
+            cout << "Enter new quantity: ";
+            cin >> newQuantity;
+            cin.ignore();
+            item.quantity = newQuantity;
+            cout << "Quantity updated successfully.\n";
+            return;
+        }
+    }
+    cout << "Item not found.\n";
+}
+
+// Sudharshan's contribution: Password authentication
+bool authenticate() {
+    string password;
+    cout << "Enter password to access Inventory Management System: ";
+    getline(cin, password);
+
+    if (password == "admin123") {
+        cout << "Access granted.\n";
+        return true;
+    } else {
+        cout << "Access denied. Wrong password.\n";
+        return false;
+    }
+}
+
+void mainMenu() {
+    int choice;
     while (true) {
-        showMenu();
+        cout << "\nInventory Management System Menu:\n";
+        cout << "1. Add Item\n";
+        cout << "2. Display All Items\n";
+        cout << "3. Search Item by Item Code\n";
+        cout << "4. Delete Item\n";
+        cout << "5. Display Top 3 Items by Quantity (Shreyas)\n";
+        cout << "6. Search Item by Name (Chinami)\n";
+        cout << "7. Update Item Quantity (Suhas)\n";
+        cout << "8. Exit\n";
+        cout << "Enter your choice: ";
         cin >> choice;
         cin.ignore();
 
-        if (choice == 6) break;
-
         switch (choice) {
-            case 1: {
-                string name;
-                int quantity;
-                double price;
-                cout << "Enter item name: ";
-                getline(cin, name);
-                cout << "Enter quantity: ";
-                cin >> quantity;
-                cout << "Enter price: ";
-                cin >> price;
-                cin.ignore();
-                inv.addItem(name, quantity, price);
-                break;
-            }
-            case 2: {
-                int id, quantity;
-                double price;
-                string name;
-                cout << "Enter item ID to update: ";
-                cin >> id;
-                cin.ignore();
-                cout << "Enter new name: ";
-                getline(cin, name);
-                cout << "Enter new quantity: ";
-                cin >> quantity;
-                cout << "Enter new price: ";
-                cin >> price;
-                cin.ignore();
-                inv.updateItem(id, name, quantity, price);
-                break;
-            }
-            case 3: {
-                int id;
-                cout << "Enter item ID to delete: ";
-                cin >> id;
-                cin.ignore();
-                inv.deleteItem(id);
-                break;
-            }
-            case 4:
-                inv.displayAll();
-                break;
-            case 5: {
-                int threshold;
-                cout << "Enter stock threshold: ";
-                cin >> threshold;
-                cin.ignore();
-                inv.displayLowStock(threshold);
-                break;
-            }
-            default:
-                cout << "Invalid choice.\n";
+            case 1: addItem(); break;
+            case 2: displayItems(); break;
+            case 3: searchItem(); break;
+            case 4: deleteItem(); break;
+            case 5: displayTop3ItemsByQuantity(); break;
+            case 6: searchItemByName(); break;
+            case 7: updateItemQuantity(); break;
+            case 8: cout << "Exiting...\n"; return;
+            default: cout << "Invalid choice! Try again.\n"; break;
         }
     }
+}
 
-    cout << "Exiting...\n";
+int main() {
+    cout << "Welcome to Inventory Management System\n";
+    if (authenticate()) {
+        mainMenu();
+    }
     return 0;
 }
